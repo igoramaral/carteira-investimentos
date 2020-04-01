@@ -28,8 +28,8 @@ ActiveAdmin.register Usuario do
         f.input :admin
       end
       f.input :email
-      f.input :password, :required => true if params[:action] == 'create'
-      f.input :password_confirmation, :required => true if params[:action] == 'create'
+      f.input :password
+      f.input :password_confirmation
     end
     f.actions
   end
