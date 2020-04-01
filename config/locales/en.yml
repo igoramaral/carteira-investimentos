@@ -29,5 +29,11 @@
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
 
+
 en:
-  hello: "Hello world"
+  active_admin:
+    resources:
+      papel: # Registered resource
+        new_model: 'Cadastrar Papel' # new action item
+        update_model: 'Editar Papel' # edit action item
+        delete_model: 'Excluir Papel' # delete action item

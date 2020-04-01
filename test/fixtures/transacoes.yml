@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuario: one
+  data: 2020-04-01 16:54:33
+  papel: one
+  quantidade: 1
+  valor: 9.99
+  tipo: MyString
+
+two:
+  usuario: two
+  data: 2020-04-01 16:54:33
+  papel: two
+  quantidade: 1
+  valor: 9.99
+  tipo: MyString

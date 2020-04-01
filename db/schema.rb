@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_190732) do
+ActiveRecord::Schema.define(version: 2020_04_01_195433) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "namespace"
@@ -35,6 +35,19 @@ ActiveRecord::Schema.define(version: 2020_04_01_190732) do
     t.index ["tipo"], name: "index_papeis_on_tipo", unique: true
   end
 
+  create_table "transacoes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "usuario_id"
+    t.timestamp "data"
+    t.bigint "papel_id"
+    t.integer "quantidade"
+    t.decimal "valor", precision: 8, scale: 2
+    t.string "tipo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["papel_id"], name: "index_transacoes_on_papel_id"
+    t.index ["usuario_id"], name: "index_transacoes_on_usuario_id"
+  end
+
   create_table "usuarios", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -49,4 +62,6 @@ ActiveRecord::Schema.define(version: 2020_04_01_190732) do
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "transacoes", "papeis"
+  add_foreign_key "transacoes", "usuarios"
 end

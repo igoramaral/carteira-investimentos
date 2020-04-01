@@ -9,7 +9,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
     inflect.irregular 'papel', 'papeis'
-    
+    inflect.irregular 'transacao', 'transacoes'
 end
 
 # These inflection rules are supported but not enabled by default:

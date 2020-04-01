@@ -15,6 +15,8 @@ ActiveAdmin.register Papel do
   #   permitted
   # end
 
+  menu :label => "Papéis"
+
   form do |f|
     f.inputs do
       f.input :nome
