@@ -3,7 +3,9 @@
 one:
   nome: MyString
   ticker: MyString
+  tipo: MyString
 
 two:
   nome: MyString
   ticker: MyString
+  tipo: MyString

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_164905) do
+ActiveRecord::Schema.define(version: 2020_04_01_190732) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "namespace"
@@ -26,13 +26,13 @@ ActiveRecord::Schema.define(version: 2020_04_01_164905) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "papers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "papeis", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "nome"
     t.string "ticker"
     t.string "tipo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tipo"], name: "index_papers_on_tipo", unique: true
+    t.index ["tipo"], name: "index_papeis_on_tipo", unique: true
   end
 
   create_table "usuarios", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
