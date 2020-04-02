@@ -20,9 +20,52 @@ ActiveAdmin.register Transacao do
   controller do
 
     def create
+      #cria transação e seta o id como o id do usuário atual
       @transacao = Transacao.new(permitted_params[:transacao])
       @transacao.usuario_id = current_usuario.id
+
+      
+      @ativo = Ativo.find_by("usuario_id = ? AND  papel_id = ?", @transacao.usuario_id, @transacao.papel.id)
+      if @transacao.tipo == 'Compra'
+        if @ativo.nil?
+          @papel = Papel.find(@transacao.papel_id)
+          @ativo = Ativo.new(usuario: current_usuario, papel: @papel, quantidade: @transacao.quantidade, valor_medio: @transacao.quantidade)
+        else
+          qtd = 0
+          valor = 0
+          transacoes = Transacao.all.where(usuario_id: current_usuario.id, papel_id: @transacao.papel.id)
+          transacoes.each do |t|
+            if t.tipo == 'Compra'
+              valor = ((valor * qtd) + (t.quantidade * t.valor))/(t.quantidade + qtd)
+              qtd += t.quantidade
+            else
+              qtd -= t.quantidade
+            end
+          end
+
+          @ativo.valor_medio = ((valor * qtd) + (@transacao.quantidade * @transacao.valor))/(qtd + @transacao.quantidade)
+          @ativo.quantidade += @transacao.quantidade
+        end
+      else
+        if @ativo.nil?
+          flash[:error] = "Você não pode inserir uma transação de venda se não possuir o ativo para vender."
+          render action: 'new'
+        else
+          if @ativo.quantidade < @transacao.quantidade
+            flash[:error] = "Você não pode inserir uma transação de venda com quantidade maior do que o total de ações que você possui."
+            render action: 'new'
+          else
+            @ativo.quantidade -= @transacao.quantidade
+          end
+        end
+      end
+      
       if @transacao.save
+        if @ativo.quantidade == 0
+          @ativo.delete
+        else
+          @ativo.save
+        end
         redirect_to  admin_transacoes_path
       end
     end

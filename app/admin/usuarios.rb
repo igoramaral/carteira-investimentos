@@ -1,10 +1,11 @@
 ActiveAdmin.register Usuario do
-  # permit_params :nome, :admin, :email, :password, :password_confirmation 
   permit_params do
     permitted = [:nome, :email, :password, :password_confirmation]
     permitted << :other if current_usuario.admin?
     permitted
   end
+
+  menu :if => proc{ current_usuario.admin? }
 
   index do
     selectable_column
