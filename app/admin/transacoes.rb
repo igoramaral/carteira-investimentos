@@ -49,11 +49,11 @@ ActiveAdmin.register Transacao do
       else
         if @ativo.nil?
           flash[:error] = "Você não pode inserir uma transação de venda se não possuir o ativo para vender."
-          render action: 'new'
+          return redirect_to admin_transacoes_path
         else
           if @ativo.quantidade < @transacao.quantidade
-            flash[:error] = "Você não pode inserir uma transação de venda com quantidade maior do que o total de ações que você possui."
-            render action: 'new'
+            flash[:error] = "Você não pode inserir uma transação de venda se a quantidade for maior do que a quantidade que você possui do ativo"
+            return redirect_to admin_transacoes_path
           else
             @ativo.quantidade -= @transacao.quantidade
           end
