@@ -37,6 +37,8 @@ class Ability
         can :manage, :all
       else
         can [:read, :update], Usuario, id: usuario.id
+        can :create, Transacao
+        can :manage, Transacao, usuario_id: usuario.id
         can :read, ActiveAdmin::Page, name: "Dashboard", namespace_name: "admin"
       end
   end

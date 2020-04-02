@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuario: one
+  papel: one
+  quantidade: 1
+  valor_medio: 9.99
+
+two:
+  usuario: two
+  papel: two
+  quantidade: 1
+  valor_medio: 9.99

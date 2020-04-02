@@ -27,6 +27,42 @@ ActiveAdmin.register Transacao do
       end
     end
 
+    def scoped_collection
+      super.includes :usuario, :papel
+    end
+
+  end
+
+  scope "Todas",:all
+  scope :compra
+  scope :venda
+  filter :papel, member_label: :ticker
+  filter :data
+  
+
+  
+  index do
+    selectable_column
+    id_column
+    if current_usuario.admin?
+      column :usuario, sortable: 'usuarios.nome' do |transacao|
+        transacao.usuario.nome
+      end
+    end
+    
+    column :data
+    column :papel, sortable: 'papeis.ticker' do |transacao|
+      transacao.papel.ticker
+    end
+    column :tipo_de_papel, sortable: 'papeis.tipo' do |transacao|
+      transacao.papel.tipo
+    end
+    column :quantidade
+    column :valor
+    column :tipo_de_transação, sortable: :tipo do |transacao|
+      transacao.tipo
+    end
+    actions
   end
 
   form do |f|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_195433) do
+ActiveRecord::Schema.define(version: 2020_04_02_194647) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "namespace"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 2020_04_01_195433) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
+  end
+
+  create_table "ativos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "usuario_id"
+    t.bigint "papel_id"
+    t.integer "quantidade"
+    t.decimal "valor_medio", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["papel_id"], name: "index_ativos_on_papel_id"
+    t.index ["usuario_id"], name: "index_ativos_on_usuario_id"
   end
 
   create_table "papeis", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -62,6 +73,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_195433) do
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ativos", "papeis"
+  add_foreign_key "ativos", "usuarios"
   add_foreign_key "transacoes", "papeis"
   add_foreign_key "transacoes", "usuarios"
 end
