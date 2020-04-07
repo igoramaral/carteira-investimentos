@@ -1,0 +1,30 @@
+
+
+@ativos = Ativo.all.where(usuario_id: current_usuario.id)
+if @ativos.empty?
+    h3 "Você não possui nenhum ativo! Adicione novas transações de compra."
+else
+    table do
+        thead do
+        tr do
+            th 'Ticker'
+            th 'Quantidade'
+            th 'Valor Médio'
+            th 'Valor Atual'
+            th 'Posição Atual'
+        end
+        end
+        tbody do
+        @ativos.each do |ativo|
+            tr id: "ativo_" + ativo.id.to_s, class: "ativos" do
+                td ativo.papel.ticker
+                td ativo.quantidade
+                td ativo.valor_medio
+                td 'N/A'
+                td 'N/A'
+            end
+        end
+        end
+    end
+end
+

@@ -7,6 +7,6 @@ class CreatePapeis < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
-    add_index :papeis, :tipo, unique: true
+    add_index :papeis, :ticker, unique: true
   end
 end

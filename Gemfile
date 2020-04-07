@@ -37,6 +37,7 @@ end
 gem 'activeadmin'
 gem 'devise'
 gem 'cancancan'
+gem 'jquery-rails'
 
 #Other gems:
 gem 'bootstrap-sass'

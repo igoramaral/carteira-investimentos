@@ -110,7 +110,7 @@ ActiveAdmin.register Transacao do
 
   form do |f|
     f.inputs do
-      f.input :data
+      f.input :data, as: :datetime_picker, :size => 16
       f.input :papel, member_label: :ticker
       f.input :quantidade
       f.input :valor

@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_194647) do
     t.string "tipo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tipo"], name: "index_papeis_on_tipo", unique: true
+    t.index ["ticker"], name: "index_papeis_on_ticker", unique: true
   end
 
   create_table "transacoes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
