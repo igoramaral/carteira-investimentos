@@ -41,6 +41,7 @@ gem 'jquery-rails'
 
 #Other gems:
 gem 'bootstrap-sass'
+gem 'chartkick'
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.

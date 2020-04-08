@@ -1,5 +1,3 @@
-
-
 @ativos = Ativo.all.where(usuario_id: current_usuario.id)
 if @ativos.empty?
     h3 "Você não possui nenhum ativo! Adicione novas transações de compra."

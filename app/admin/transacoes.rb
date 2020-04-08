@@ -1,80 +1,8 @@
 ActiveAdmin.register Transacao do
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
   permit_params :usuario_id, :data, :papel_id, :quantidade, :valor, :tipo
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:usuario_id, :data, :papel_id, :quantidade, :valor, :tipo]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
 
   menu :label => "Histórico de Transações"
-
-  controller do
-
-    def create
-      #cria transação e seta o id como o id do usuário atual
-      @transacao = Transacao.new(permitted_params[:transacao])
-      @transacao.usuario_id = current_usuario.id
-
-      
-      @ativo = Ativo.find_by("usuario_id = ? AND  papel_id = ?", @transacao.usuario_id, @transacao.papel.id)
-      if @transacao.tipo == 'Compra'
-        if @ativo.nil?
-          @papel = Papel.find(@transacao.papel_id)
-          @ativo = Ativo.new(usuario: current_usuario, papel: @papel, quantidade: @transacao.quantidade, valor_medio: @transacao.quantidade)
-        else
-          qtd = 0
-          valor = 0
-          transacoes = Transacao.all.where(usuario_id: current_usuario.id, papel_id: @transacao.papel.id)
-          transacoes.each do |t|
-            if t.tipo == 'Compra'
-              valor = ((valor * qtd) + (t.quantidade * t.valor))/(t.quantidade + qtd)
-              qtd += t.quantidade
-            else
-              qtd -= t.quantidade
-            end
-          end
-
-          @ativo.valor_medio = ((valor * qtd) + (@transacao.quantidade * @transacao.valor))/(qtd + @transacao.quantidade)
-          @ativo.quantidade += @transacao.quantidade
-        end
-      else
-        if @ativo.nil?
-          flash[:error] = "Você não pode inserir uma transação de venda se não possuir o ativo para vender."
-          return redirect_to admin_transacoes_path
-        else
-          if @ativo.quantidade < @transacao.quantidade
-            flash[:error] = "Você não pode inserir uma transação de venda se a quantidade for maior do que a quantidade que você possui do ativo"
-            return redirect_to admin_transacoes_path
-          else
-            @ativo.quantidade -= @transacao.quantidade
-          end
-        end
-      end
-      
-      if @transacao.save
-        if @ativo.quantidade == 0
-          @ativo.delete
-        else
-          @ativo.save
-        end
-        redirect_to  admin_transacoes_path
-      end
-    end
-
-    def scoped_collection
-      super.includes :usuario, :papel
-    end
-
-  end
 
   scope "Todas",:all
   scope :compra
@@ -117,5 +45,87 @@ ActiveAdmin.register Transacao do
       f.input :tipo, :as => :radio, :collection => ["Compra", "Venda"]
     end
     f.actions
+  end
+
+  controller do
+
+    def create
+      #cria transação e seta o id como o id do usuário atual
+      @transacao = Transacao.new(permitted_params[:transacao])
+      @transacao.usuario_id = current_usuario.id
+      
+      if @transacao.save
+        atualiza_ativo(@transacao)
+        redirect_to admin_dashboard_path
+      end
+      
+    end
+
+    def destroy
+      @transacao = Transacao.find(params[:id])
+      @ativo = Ativo.find_by(usuario_id: @transacao.usuario.id, papel_id: @transacao.papel.id)
+      @transacao.delete
+      calcula_valor_medio(@ativo)
+      if @ativo.quantidade <= 0
+        @ativo.delete
+      else
+          @ativo.save
+      end
+      redirect_to admin_transacoes_path
+    end
+
+    def atualiza_ativo(transacao)
+      @ativo = Ativo.find_or_initialize_by(usuario_id: transacao.usuario.id, papel_id:transacao.papel.id)
+  
+      if transacao.tipo == 'Compra'
+          if @ativo.new_record?
+            @ativo.quantidade =  transacao.quantidade 
+            @ativo.valor_medio = transacao.valor
+          else
+            calcula_valor_medio(@ativo)
+          end
+      else
+        if @ativo.new_record?
+          flash[:error] = "Você não pode inserir uma transação de venda se não possuir o ativo para vender."
+          transacao.delete
+          return redirect_to admin_transacoes_path
+        else
+          if @ativo.quantidade < transacao.quantidade
+            flash[:error] = "Você não pode inserir uma transação de venda se a quantidade for maior do que a quantidade que você possui do ativo"
+            transacao.delete
+            return redirect_to admin_transacoes_path
+          else
+            @ativo.quantidade -= transacao.quantidade
+          end
+        end
+      end
+  
+      if @ativo.quantidade <= 0
+          @ativo.delete
+      else
+          @ativo.save
+      end
+    end
+  
+    def calcula_valor_medio(ativo)
+        qtd = 0
+        valor = 0
+        transacoes = Transacao.all.where(usuario_id: current_usuario.id, papel_id: ativo.papel.id)
+        transacoes.each do |t|
+          if t.tipo == 'Compra'
+              valor = ((valor * qtd) + (t.quantidade * t.valor))/(t.quantidade + qtd)
+              qtd += t.quantidade
+          else
+              qtd -= t.quantidade
+          end
+        end
+        ativo.valor_medio = valor
+        ativo.quantidade = qtd
+    end
+
+    def scoped_collection
+      super.includes :usuario, :papel
+    end
+
   end
 end

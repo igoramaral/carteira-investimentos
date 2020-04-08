@@ -53,6 +53,9 @@ ActiveAdmin.register_page "Dashboard" do
           panel "Meus ativos" do
             render partial: 'tabela_ativos'
           end
+          panel "Composição da Carteira" do
+            render partial: 'grafico'
+          end
         end
         column do
           panel "Gerenciar Transições" do
