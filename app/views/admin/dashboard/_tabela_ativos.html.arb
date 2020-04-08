@@ -20,8 +20,8 @@ else
                 td ativo.papel.ticker
                 td ativo.quantidade
                 td ativo.valor_medio
-                td 'N/A'
-                td 'N/A'
+                td 'Carregando...', id: "valor_atual_" + ativo.id.to_s
+                td 'Carregando...', id: "posicao_atual_" + ativo.id.to_s
             end
         end
         end

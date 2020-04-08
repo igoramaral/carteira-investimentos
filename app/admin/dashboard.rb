@@ -19,7 +19,7 @@ ActiveAdmin.register_page "Dashboard" do
       valor_atual = body["Global Quote"]["05. price"].to_f
       posicao = (qtd * valor_atual) - (qtd * valor_medio)
       
-      resposta = JSON.generate({:preco => valor_atual, :posicao => posicao})
+      resposta = {:preco => valor_atual, :posicao => posicao}
 
       render json: resposta
     end
