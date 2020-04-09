@@ -1,16 +1,20 @@
 ativos = Ativo.all.where(usuario_id: current_usuario.id)
-total = 0
-acao = 0
-fii = 0
-ativos.each do |a|
-    total += a.quantidade
-    if a.papel.tipo == 'Ação'
-        acao += a.quantidade
-    else
-        fii += a.quantidade
+if ativos.empty?
+    h3 "Gráfico indisponível. Adicione ativos à sua carteira."
+else
+    total = 0
+    acao = 0
+    fii = 0
+    ativos.each do |a|
+        total += a.quantidade
+        if a.papel.tipo == 'Ação'
+            acao += a.quantidade
+        else
+            fii += a.quantidade
+        end
     end
-end
-acao_total = ((acao.to_d/total).round(2)) * 100
-fii_total = ((fii.to_d/total).round(2)) * 100
+    acao_total = ((acao.to_d/total).round(2)) * 100
+    fii_total = ((fii.to_d/total).round(2)) * 100
 
-render partial: 'grafico_view', locals: { metric: { "Ações"=> acao_total, "Fundos de Investimento Imobiliário" => fii_total} }
+    render partial: 'grafico_view', locals: { metric: { "Ações"=> acao_total, "Fundos de Investimento Imobiliário" => fii_total} }
+end

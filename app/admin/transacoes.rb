@@ -110,7 +110,7 @@ ActiveAdmin.register Transacao do
     def calcula_valor_medio(ativo)
         qtd = 0
         valor = 0
-        transacoes = Transacao.all.where(usuario_id: current_usuario.id, papel_id: ativo.papel.id)
+        transacoes = Transacao.all.where(usuario_id: current_usuario.id, papel_id: ativo.papel.id).order(:data)
         transacoes.each do |t|
           if t.tipo == 'Compra'
               valor = ((valor * qtd) + (t.quantidade * t.valor))/(t.quantidade + qtd)

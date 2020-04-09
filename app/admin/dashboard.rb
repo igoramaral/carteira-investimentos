@@ -25,6 +25,10 @@ ActiveAdmin.register_page "Dashboard" do
     end
   end
 
+  action_item :nova_transacao do
+    link_to('Adicionar Nova Transação', new_admin_transacao_path)
+  end
+
   content title: proc { I18n.t("active_admin.dashboard") } do
     if current_usuario.admin?
       columns do
@@ -49,20 +53,15 @@ ActiveAdmin.register_page "Dashboard" do
 
     else
       columns do
-        column do
+        column span: 2 do
           panel "Meus ativos" do
             render partial: 'tabela_ativos'
           end
-          panel "Composição da Carteira" do
-            render partial: 'grafico'
-          end
+          
         end
         column do
-          panel "Gerenciar Transições" do
-            ul do
-              li link_to("Adicionar nova Transação", new_admin_transacao_path)
-              li link_to("Listar Transações", admin_transacoes_path)
-            end
+          panel "Composição da Carteira" do
+            render partial: 'grafico'
           end
         end
       end
